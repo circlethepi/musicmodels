@@ -59,7 +59,7 @@ def parse_tunes(abc):
     """
     counter = 0
     for song in Parser(abc) :
-        #title = song.title
+        title = song.title
         key = song.key
         mapping = key.keymap
         #print('stripped music of ', title)
@@ -71,7 +71,7 @@ def parse_tunes(abc):
         trans = song._transposed
 
         #music = sjkabc.strip_chords(strip_everything_we_dont_want(sjkabc.expand_parts(tune.abc[0]))).upper()
-        print("\nanalysis for song ", counter)
+        print("\nanalysis for song ", counter, title)
         print("music: ", stripped_music)
         print("song key: ", key.key_raw)
         print("kay note map: ", mapping)
@@ -706,9 +706,4 @@ def parse_directory(directory):
                 yield song
 
 
-## running the program
 
-with open("D:/Programming Projects/musicmodels/music/ashover.txt", "r") as f:
-   content = f.read()
-
-parse_tunes(content)
