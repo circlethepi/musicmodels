@@ -111,9 +111,13 @@ class post_song:  #processed song that has the information that we want
         return ''.join(out)
 
 
+
     def extract_notes(self):
-        music = self.do_mapping()
+        music = ''.join(self.do_mapping().split())
         default_len = self.default_note_length
+
+        list_of_notes = []
+
 
         # set lists of pitches and durations
         pitches = []
@@ -121,45 +125,46 @@ class post_song:  #processed song that has the information that we want
         # list of notes to extract
         notes = []
 
-        current_pitch = []
-        current_duration = []
+        #extract each note information into list
+        current_list = []
+        for i in range((len(music)- 1)):
+            if music[i+1] in 'ABCDEFG^=_' and music[i] not in '_^=':
+                current_list.append(music[i])
+                list_of_notes.append(''.join(current_list))
+                current_list = []
+            else:
+                current_list.append(music[i])
 
-        finding_pitch = True
+        print(list_of_notes)
 
-        for char in music:
-            if char in 'ABCDEFG' and finding_pitch:  # if a note character
-                current_pitch.append(char)  # add to current pitch
-                finding_pitch = False
+        for str in list_of_notes:
+            pitch = []
+            duration = []
+            for char in str:
+                if char in 'ABCDEFG_^=':
+                    pitch.append(char)
+                if char in '1234567890/':
+                    duration.append(char)
 
-            elif char in '_^=' and finding_pitch:
-                current_pitch.append(char)
-                finding_pitch = True
+            # set duration
+            if duration == []: #if empty, default length
+                dur = default_len
+            elif duration[0] == '/':
+                duration.insert(0, '1')  # if just fractional value of default length, add numerator
+                dur = frac(''.join(duration)) * default_len #then define duration
+            else:
+              dur = frac(''.join(duration)) * default_len  # this is our duration
 
-            elif not finding_pitch:  # we are now getting the duration
-                if char in '1234567890/':  # if a duration
-                    current_duration.append(char)  # add to our duration list
+            # set pitch
+            pit = pitch_class_representation(''.join(pitch))[0]  # getting integer value of pitch
 
-                elif char not in '1234567890/':  # if no longer a duration character
+            #print(pitch, pit, duration, dur) #sanity check
 
-                    # set duration
-                    if current_duration == []:
-                        dur = default_len
-                    else:
-                        dur = frac(''.join(current_duration))  # this is our duration
+            # add to our lists
+            pitches.append(pit)
+            durations.append(dur)
+            notes.append(note.note(pit, dur))
 
-                    # set pitch
-                    pit = pitch_class_representation(''.join(current_pitch))[0]  # getting integer value of pitch
-
-                    # add to our lists
-                    pitches.append(pit)
-                    durations.append(dur)
-                    notes.append(note.note(pit, dur))
-
-                    # reset note containers
-                    current_pitch = []
-                    current_duration = []
-
-                    finding_pitch = True  # now finding pitches
         setattr(self, 'pitches', pitches)
         setattr(self, 'durations', durations)
         setattr(self, 'notelist', notes)
@@ -176,10 +181,10 @@ def key_signature_mapping(music, keymap):
         if (note == '=' or note == '_' or note == '^'):  # if note char is an accidental
             accidental = True
             converted.append(note)
-        elif (note in 'ABCDEFG' and accidental):  # if note char is preceeded by an accidental
+        elif (note in 'ABCDEFG ' and accidental):  # if note char is preceeded by an accidental
             accidental = False
             converted.append(note)
-        elif note in 'ABCDEFG':  # if just a note
+        elif note in 'ABCDEFG ':  # if just a note
             converted.append(keymap[note])
         elif note in ' 1234567890/\ ':
             converted.append(note)

@@ -116,7 +116,7 @@ class song_key:
         :return: keymapping to translate letters into absolute pitches from map
         """
         # set default keymap
-        keymap = {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G'}
+        keymap = {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', ' ': ' '}
 
         rel_major = key.relative_major  # set relative major number
         rel_major_name = chromatic_notes[rel_major]  # get relative major notename
