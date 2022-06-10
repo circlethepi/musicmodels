@@ -26,5 +26,6 @@ for tune in sjk.Parser(content):
    print(new.pitches)
    print(new.durations)
    print(new.notelist)
+   print(len(new.pitches), len(new.durations), len(new.notelist))
 
    print('\n\n')

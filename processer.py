@@ -127,13 +127,21 @@ class post_song:  #processed song that has the information that we want
 
         #extract each note information into list
         current_list = []
-        for i in range((len(music)- 1)):
-            if music[i+1] in 'ABCDEFG^=_' and music[i] not in '_^=':
+        for i in range((len(music))):
+            if i < len(music) - 1:
+                if music[i+1] in 'ABCDEFG^=_' and music[i] not in '_^=':
+                    current_list.append(music[i])
+                    list_of_notes.append(''.join(current_list))
+                    current_list = []
+                else:
+                    current_list.append(music[i])
+            elif i == len(music) - 1:
                 current_list.append(music[i])
                 list_of_notes.append(''.join(current_list))
-                current_list = []
-            else:
-                current_list.append(music[i])
+
+
+
+
 
         print(list_of_notes)
 
