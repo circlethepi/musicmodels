@@ -61,9 +61,22 @@ class post_song:  #processed song that has the information that we want
 
     @property
     def given_key(self):
+        """
+
+        :return: key object based on key field from song pre processing
+        """
         k = self.pre.key[0]
         key = kl.song_key(k)
         return key
+
+    @property
+    def key_center(self):
+        """
+
+        :return: integer value of keycenter
+        will be integer in base 12 where 0 is c natural
+        """
+        return pitch_class_representation(self.given_key.keycenter)[0]
 
     @property
     def default_note_length(self):
@@ -113,6 +126,15 @@ class post_song:  #processed song that has the information that we want
 
 
     def extract_notes(self):
+        """
+
+        :return: sets attributes pitches, durations, and notelist
+        pitches = list[int]
+        durations = list[frac]
+        notelist = list[note]
+            where note is an object as defined in note.py, and containing pitch, duration feature values identical to those listed above
+
+        """
         music = ''.join(self.do_mapping().split())
         default_len = self.default_note_length
 
@@ -143,7 +165,7 @@ class post_song:  #processed song that has the information that we want
 
 
 
-        print(list_of_notes)
+        #print(list_of_notes)
 
         for str in list_of_notes:
             pitch = []
@@ -178,6 +200,29 @@ class post_song:  #processed song that has the information that we want
         setattr(self, 'notelist', notes)
 
         return
+
+
+    @property
+    def transposed_pitches(self):
+        self.extract_notes()
+        kc = self.given_key.keycenter
+        transkey = pitch_class_representation(kc)[0]
+
+
+        transposed = []
+
+        for pitch in self.pitches:
+            add = ((pitch - transkey) % 12)
+            transposed.append(add)
+
+
+        return transposed
+
+    @property
+    def total_duration(self):
+        self.extract_notes()
+        d = sum(self.durations)
+        return d
 
 
 ### key mapping
