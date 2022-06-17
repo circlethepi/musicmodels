@@ -4,13 +4,16 @@ import key_length as kl
 import processer as ps
 import note
 import csv
+import os
+
+cwd = os.getcwd()
 
 def write_data(input):
-   with open('D:/Programming Projects/musicmodels/data.csv', 'w', newline='') as c:
+   with open(cwd+'/data.csv', 'w', newline='') as c:
       writer = csv.writer(c)
       writer.writerows(input)
 
-with open("D:/Programming Projects/musicmodels/music/test.abc", "r") as f:
+with open(cwd+"/music/test.abc", "r") as f:
 #with open("D:/Programming Projects/musicmodels/music/ashover.txt", "r") as f:
    content = f.read()
 
