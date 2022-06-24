@@ -1,4 +1,3 @@
-import moparser as mp
 import sjkabcfunc as sjk
 import key_length as kl
 import processer as ps
@@ -54,7 +53,9 @@ for tune in sjk.Parser(content):
    #print('\n\n')
 
 
-
+"""
+Running Everything
+"""
 
 write_data(rows)
 
