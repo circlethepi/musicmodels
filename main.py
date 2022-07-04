@@ -4,6 +4,7 @@ import processer as ps
 import note
 import csv
 import os
+import data_reader as dr
 
 cwd = os.getcwd()
 
@@ -58,4 +59,8 @@ Running Everything
 """
 
 write_data(rows)
+
+test  = dr.generate_random_beta(1000, 0.5, 0.5)
+#print(test)
+dr.fit_beta(test)
 

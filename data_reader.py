@@ -30,3 +30,12 @@ class row_obj:
         self.xvals = x
 
 
+import scipy.stats as stats
+def generate_random_beta(n, a, b):
+    return stats.beta.rvs(a, b, size=n)
+
+def fit_beta(vars):
+    a1, b1, loc1, scale1 = stats.beta.fit(vars)
+    print(a1, b1)
+
+
