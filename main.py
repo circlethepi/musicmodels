@@ -60,7 +60,22 @@ Running Everything
 
 write_data(rows)
 
-test  = dr.generate_random_beta(1000, 0.5, 0.5)
+songs = dr.read_data_file(cwd+'/data.csv')
+to_analyze = dr.create_analysis_sets(songs)
+
+analysis = dr.analysis_set(to_analyze)
+analysis.find_fit()
+#print(analysis.fit)
+
+for i in analysis.set:
+   print(i)
+
+print('\n\n')
+
+for i in analysis.fit:
+   print(i)
+
+#test  = dr.generate_random_beta(1000, 0.5, 0.5)
 #print(test)
-dr.fit_beta(test)
+#dr.fit_beta(test)
 
