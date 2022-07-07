@@ -4,8 +4,10 @@ import note
 from fractions import Fraction as frac
 
 def expand_music(music):
-    for f in [sjk.expand_repeats, sjk.strip_chords, sjk.strip_extra_chars]:
+    for f in [sjk.strip_chords, sjk.expand_repeats, sjk.strip_extra_chars]:
         music = f(music)
+
+    #print(music.upper())
     return music.upper()
 
 def pitch_class_representation(notes):  # mapping to pitch class values
@@ -58,6 +60,7 @@ class post_song:  #processed song that has the information that we want
     def __init__(self, pre_song):
         self.pre = pre_song
         self.music = expand_music(' '.join(pre_song.abc))
+        #print(expand_music(' '.join(pre_song.abc)))
 
     @property
     def given_key(self):
@@ -121,6 +124,7 @@ class post_song:  #processed song that has the information that we want
         if to_ksm != []:
             out.append(key_signature_mapping(''.join(to_ksm), key.keymap))
 
+        #print(''.join(out))
         return ''.join(out)
 
 
@@ -137,6 +141,7 @@ class post_song:  #processed song that has the information that we want
         """
         music = ''.join(self.do_mapping().split())
         default_len = self.default_note_length
+        #print(music)
 
         list_of_notes = []
 
@@ -160,10 +165,6 @@ class post_song:  #processed song that has the information that we want
             elif i == len(music) - 1:
                 current_list.append(music[i])
                 list_of_notes.append(''.join(current_list))
-
-
-
-
 
         #print(list_of_notes)
 

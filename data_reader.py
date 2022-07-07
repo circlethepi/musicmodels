@@ -114,6 +114,10 @@ class analysis_set:
         #for i in fits:
         #    print(i)
 
+    def trans_size(self):
+        for i in self.set:
+            for j in i:
+                print(len(j))
 
 
 
