@@ -1,6 +1,16 @@
 import csv
 import scipy
 from fractions import Fraction as frac
+from scipy.stats import beta
+def generate_random_beta(n, a, b):
+    return beta.rvs(a, b, size=n)
+
+def fit_beta(vars):
+    a1, b1, loc1, scale1 = beta.fit(vars)
+    #print(a1, b1)
+    results = (a1, b1)
+    return results
+
 
 
 def read_data_file(filename):
@@ -119,17 +129,48 @@ class analysis_set:
             for j in i:
                 print(len(j))
 
+    def create_distribution_matrix(self):
+        mat = [[],[],[],[],[],[],[],[],[],[],[],[]]
+        for i in range(12):
+            nna = 0
+            for j in range(12):
+                if self.fit[i][j] == 'n/a':
+                    nna += 1
+            if nna == 0:
+                for j in range(11):
+                    mat[i].append(beta(self.fit[i][j][0], self.fit[i][j][1], scale=1/12))
+                    #mat[i].append
+                    pass
+                nb = mat[i][0:10]
+                mat[i].append(nna_bonus(nb))
+            elif nna >= 1:
+                nb1 = []
+                for j in range(12):
+                    nb1.append(beta(self.fit[i][j][0], self.fit[i][j][1], scale=(1/nna)))
+
+                for j in range(12):
+                    if self.fit[i][j] == 'n/a':
+                        mat[i].append(nna_bonus(nb1))
+                    elif self.fit[i][j] != 'n/a':
+                        mat[i].append(beta(self.fit[i][j][0], self.fit[i][j][1], scale=(1/nna)))
+
+        self.dist = mat
+        return
 
 
 
-import scipy.stats as stats
-def generate_random_beta(n, a, b):
-    return stats.beta.rvs(a, b, size=n)
 
-def fit_beta(vars):
-    a1, b1, loc1, scale1 = stats.beta.fit(vars)
-    #print(a1, b1)
-    results = (a1, b1)
-    return results
+class nna_bonus:
+    def __init__(self, betalist):
+        """
+        :param betalist: should be beta distrubutions each scaled to 1/len(betalist)
+        """
+        self.betas = betalist
 
+    def pdf(self, x):
+        val = 0
+        for b in self.betas:
+            val += b.pdf(x)
+
+        return 1-val
 

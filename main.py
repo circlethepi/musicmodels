@@ -24,7 +24,7 @@ header = ['title', 'key_center', 'sum_dur', 'n_notes', '[p][d]']
 rows = [header]
 for tune in sjk.Parser(content):
    new = ps.post_song(tune)
-   print(new.pre.title)
+   #print(new.pre.title)
    new.extract_notes() #have pitches, durations caluculated
 
    row = [tune.title[0], new.key_center, new.total_duration, len(new.notelist)]
@@ -66,6 +66,7 @@ to_analyze = dr.create_analysis_sets(songs)
 
 analysis = dr.analysis_set(to_analyze)
 analysis.find_fit()
+analysis.create_distribution_matrix()
 #print(analysis.fit)
 
 for i in analysis.set:
@@ -76,6 +77,10 @@ print('\n\n')
 for i in analysis.fit:
    print(i)
 
+print('\n\n')
+
+for i in analysis.dist:
+   print(i)
 
 #analysis.trans_size()
 #test  = dr.generate_random_beta(1000, 0.5, 0.5)

@@ -92,6 +92,7 @@ def expand_repeats(abc):
     end = 0
 
     parsed_abc = parsed_abc.replace('::', ':||:')
+    parsed_abc = parsed_abc.replace(':|:', ':||:')
 
     while True:
         end = parsed_abc.find(':|', start)
