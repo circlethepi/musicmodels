@@ -1,14 +1,21 @@
 import sjkabcfunc as sjk
 import key_length as kl
-import processer as ps
+import song_processer as ps
 import note
 import csv
 import os
 import data_reader as dr
 
+
 cwd = os.getcwd()
 
 def write_data(input):
+   """
+   writes input rows to the data.csv output file
+
+   :param input: list of lists ie list[rows]
+   :return: none
+   """
    with open(cwd+'/data.csv', 'w', newline='') as c:
       writer = csv.writer(c)
       writer.writerows(input)
