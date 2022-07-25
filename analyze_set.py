@@ -9,18 +9,18 @@ import data_reader as dr
 
 cwd = os.getcwd()
 
-def write_data(input):
+def write_data(filename, input):
    """
    writes input rows to the data.csv output file
 
    :param input: list of lists ie list[rows]
    :return: none
    """
-   with open(cwd+'/data.csv', 'w', newline='') as c:
+   with open(cwd+'/'+filename, 'w', newline='') as c:
       writer = csv.writer(c)
       writer.writerows(input)
 
-with open(cwd+"/music/readable_tunes.txt", "r") as f:
+with open(cwd+"/music/test_tunes.txt", "r") as f:
 #with open("D:/Programming Projects/musicmodels/music/ashover.txt", "r") as f:
    content = f.read()
 
@@ -66,28 +66,31 @@ for tune in sjk.Parser(content):
 Running Everything
 """
 
-write_data(rows)
+write_data('data.csv', rows)
 
 songs = dr.read_data_file(cwd+'/data.csv')
 to_analyze = dr.create_analysis_sets(songs)
 
 analysis = dr.analysis_set(to_analyze)
-analysis.find_fit()
-analysis.create_distribution_matrix()
 #print(analysis.fit)
 
-for i in analysis.set:
-   print(i)
+write_data('aset.csv', analysis.set)
+write_data('afit.csv', analysis.fit)
+#write_data('adist.csv', analysis.dist)
 
-print('\n\n')
+#for i in analysis.set:
+#   print(i)
+#print('\n\n')
 
-for i in analysis.fit:
-   print(i)
+#for i in analysis.fit:
+#   print(i)
+#print('\n\n')
 
-print('\n\n')
+#for i in analysis.dist:
+#   print(i)
 
-for i in analysis.dist:
-   print(i)
+
+
 
 #analysis.trans_size()
 #test  = dr.generate_random_beta(1000, 0.5, 0.5)

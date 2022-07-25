@@ -156,7 +156,7 @@ class post_song:  #processed song that has the information that we want
         current_list = []
         for i in range((len(music))):
             if i < len(music) - 1:
-                if music[i+1] in 'ABCDEFG^=_' and music[i] not in '_^=':
+                if music[i+1] in 'ABCDEFG^=_Z' and music[i] not in '_^=':
                     current_list.append(music[i])
                     list_of_notes.append(''.join(current_list))
                     current_list = []
@@ -172,7 +172,7 @@ class post_song:  #processed song that has the information that we want
             pitch = []
             duration = []
             for char in str:
-                if char in 'ABCDEFG_^=':
+                if char in 'ABCDEFG_^=Z':
                     pitch.append(char)
                 if char in '1234567890/':
                     duration.append(char)
@@ -200,6 +200,7 @@ class post_song:  #processed song that has the information that we want
         setattr(self, 'durations', durations)
         setattr(self, 'notelist', notes)
 
+        print(pitches)
         return
 
 
@@ -238,7 +239,7 @@ def key_signature_mapping(music, keymap):
         elif (note in 'ABCDEFG ' and accidental):  # if note char is preceeded by an accidental
             accidental = False
             converted.append(note)
-        elif note in 'ABCDEFG ':  # if just a note
+        elif note in 'ABCDEFGZ ':  # if just a note
             converted.append(keymap[note])
         elif note in ' 1234567890/\ ':
             converted.append(note)

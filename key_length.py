@@ -31,7 +31,7 @@ mode_transposition = {'major': 0, 'minor': 3, 'mixolydian': -7, 'dorian': -2, 'p
 number_accidentals = {'C#': 7, 'F#': 6, 'B': 5, 'E': 4, 'A': 3, 'D': 2, 'G': 1, 'C': 0, 'F': -1, 'Bb': -2, 'Eb': -3, 'Ab': -4, 'Db': -5, 'Gb': -6, 'Cb': -7}
 
 #note transpositions
-pitch_values = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
+pitch_values = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11, 'Z':13}
 accidental_values = {'=': 0, '^': 1, '_': -1}
 chromatic_notes = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
 
@@ -116,7 +116,7 @@ class song_key:
         :return: keymapping to translate letters into absolute pitches from map
         """
         # set default keymap
-        keymap = {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', ' ': ' '}
+        keymap = {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', ' ': ' ', 'Z': 'Z'}
 
         rel_major = key.relative_major  # set relative major number
         rel_major_name = chromatic_notes[rel_major]  # get relative major notename

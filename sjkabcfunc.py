@@ -150,7 +150,7 @@ def strip_chords(abc):
 
     Example::
 
-        >>> from sjkabc import strip_chords
+        >>> #from sjkabc import strip_chords
         >>> stripped = strip_chords('"G" abc|"Em" bcd|[GBd] cde')
         >>> stripped
         ' abc| bcd | cde'
@@ -184,7 +184,7 @@ def strip_extra_chars(abc):
     :rtype: str
 
     """
-    for rep in '<,>\[]':
+    for rep in '<,>\[\']':
         abc = abc.replace(rep, '')
     return abc
 

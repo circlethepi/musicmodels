@@ -109,17 +109,19 @@ class analysis_set:
     def __init__(self, data_list):
         self.set = data_list
 
-    def find_fit(self):
         fits = [[],[],[],[],[],[],[],[],[],[],[],[]]
         for i in range(12):
             for j in range(12):
-                current_set = self.set[i][j]
+                current_set = data_list[i][j]
                 if len(current_set):
                     mle = fit_beta(current_set)
                     fits[i].append(mle)
                 else:
                     fits[i].append('n/a')
         self.fit = fits
+
+        self.dist = create_distribution_matrix(fits)
+
 
         #for i in fits:
         #    print(i)
@@ -129,48 +131,70 @@ class analysis_set:
             for j in i:
                 print(len(j))
 
-    def create_distribution_matrix(self):
-        mat = [[],[],[],[],[],[],[],[],[],[],[],[]]
-        for i in range(12):
-            nna = 0
+
+
+
+def create_distribution_matrix(beta_matrix):
+    """
+
+    :param beta_matrix: list(list) - a list of 12 lists, each inner list consists of 12 tuples as the paramaters of a beta function
+        theoretically created via an analysis_set.find_fit() function on a data set
+    :return: mat: list(list) - a list of 12 lists, each inner list consisiting of 12 distribution objects
+    """
+
+    mat = [[],[],[],[],[],[],[],[],[],[],[],[]]
+    for i in range(12):
+        nna = 0     #set number of n/as in row
+
+        #getting value of nna for row
+        for j in range(12):
+            if beta_matrix[i][j] == 'n/a':
+                nna += 1
+
+        #based on the value of nna
+        if nna == 0:
+            #then the last dist will become non-beta to assure prob 1 at all times
+            for j in range(11):
+                mat[i].append(beta(beta_matrix[i][j][0], beta_matrix[i][j][1]))  #mult by 1/12
+                # mat[i].append
+                pass
+            nb = mat[i][0:10]   #betalist
+            nnadist = nna_bonus(nb, 1)
+            mat[i].append(nnadist)
+
+
+        elif nna >= 1:
+            nb1 = [] #betalist
             for j in range(12):
-                if self.fit[i][j] == 'n/a':
-                    nna += 1
-            if nna == 0:
-                for j in range(11):
-                    mat[i].append(beta(self.fit[i][j][0], self.fit[i][j][1], scale=1/12))
-                    #mat[i].append
-                    pass
-                nb = mat[i][0:10]
-                mat[i].append(nna_bonus(nb))
-            elif nna >= 1:
-                nb1 = []
-                for j in range(12):
-                    nb1.append(beta(self.fit[i][j][0], self.fit[i][j][1], scale=(1/nna)))
+                nb1.append(beta(beta_matrix[i][j][0], beta_matrix[i][j][1]))  #mult by 1/12
 
-                for j in range(12):
-                    if self.fit[i][j] == 'n/a':
-                        mat[i].append(nna_bonus(nb1))
-                    elif self.fit[i][j] != 'n/a':
-                        mat[i].append(beta(self.fit[i][j][0], self.fit[i][j][1], scale=(1/nna)))
+            for j in range(12):
+                if beta_matrix[i][j] == 'n/a':
+                    mat[i].append(nna_bonus(nb1, nna))
+                elif beta_matrix[i][j] != 'n/a':
+                    mat[i].append(beta(beta_matrix[i][j][0], beta_matrix[i][j][1]))  #   * 1/12
 
-        self.dist = mat
-        return
+    return mat
+
+
 
 
 
 
 class nna_bonus:
-    def __init__(self, betalist):
+    def __init__(self, betalist, n_nna):
         """
-        :param betalist: should be beta distrubutions each scaled to 1/len(betalist)
+        :param betalist: should be beta distrubutions each scaled to 1/12
         """
         self.betas = betalist
+        self.n = n_nna
 
     def pdf(self, x):
         val = 0
         for b in self.betas:
             val += b.pdf(x)
 
-        return 1-val
+        result = (1 - (1/12)*val)/self.n
+
+        return result
 
